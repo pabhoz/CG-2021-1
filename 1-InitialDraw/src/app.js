@@ -1,53 +1,57 @@
+import * as THREE from '../../node_modules/three/build/three.module.js';
+import { OrbitControls } from '../../node_modules/three/examples/jsm/controls/OrbitControls.js';
+
+
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
 const renderer = new THREE.WebGLRenderer();
 
-let speed = 0.01;
+export let speed = 0.01;
+let spotLight;
+let objects = [];
+
+document.body.onload = () => {
+    main();
+    const speedUpBtn = document.querySelector("#speedUp");
+    const speedDownBtn = document.querySelector("#speedDown");
+
+    speedUpBtn.onclick = () => {
+        speedUp();
+    }
+    speedDownBtn.onclick = () => {
+        speedDown();
+    }
+}
 
 function main() {
     renderer.setSize(window.innerWidth, window.innerHeight);
     renderer.shadowMap.enabled = true;
     document.body.appendChild(renderer.domElement);
 
+    camera.position.z = 5;
+    camera.position.y = 5;
+    
+
+    // Controles
+    const controls = new OrbitControls( camera, renderer.domElement );
 
     // Lights
     setUpLights();
-
-    /*
-    const geometry = new THREE.BufferGeometry();
-    const vertices = new Float32Array( [
-        0.0, 1.0,  1.0,
-        -1.0, 0.0,  1.0,
-        1.0,  0.0,  1.0
-    ]);
     
-    // https://threejs.org/docs/index.html#api/en/core/BufferGeometry.normalizeNormals
-    // geometry.setIndex([]);
-    geometry.setAttribute( 'position', new THREE.BufferAttribute( vertices, 3 ) );
-    
-    cube = new THREE.Mesh(geometry, new THREE.MeshBasicMaterial({
-        color: 0xff0000,
-        wireframe: false,
-    }));
-
-    
-
-    // scene.add(cube);
-    */
-
-    el = drawCube(0xFF0000);
+    let el = drawCube(0xFF0000);
     el.position.z = 0;
     el.position.y = 3;
     scene.add(el);
+    objects.push(el);
 
-    plane = drawPlane(10, 10, 4, 4, 0x404040, true);
+    camera.lookAt(el.position);
+
+    let plane = drawPlane(10, 10, 4, 4, 0x404040, true);
     plane.rotation.x = Math.PI / 2;
     scene.add(plane);
 
 
-    camera.position.z = 5;
-    camera.position.y = 5;
-    camera.lookAt(el.position);
+    
 
     animate();
 }
@@ -74,8 +78,8 @@ function drawPlane(w, h, sw, sh, color, ds = false) {
 function animate() {
     requestAnimationFrame(animate);
     renderer.render(scene, camera);
-    el.rotation.x += speed;
-    el.rotation.y += speed;
+    objects[0].rotation.x += speed;
+    objects[0].rotation.y += speed;
 
     // cube.rotation.x += speed;
 
@@ -105,6 +109,7 @@ function speedUp() {
     console.log("Subiendo velocidad");
     speed += 0.01;
 }
+
 function speedDown() {
     speed -= 0.01;
 }
