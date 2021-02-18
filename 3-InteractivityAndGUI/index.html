@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2. Materials & Lights</title>
+    <script type="module" src="./src/app.js"></script>
+    <link rel="stylesheet" href="./styles/main.css">
+</head>
+<body>
+    <div id="aiudaBtn">?</div>
+    <div id="aiuda">
+        Acá tendría mi ayuda, si no fuera el profe y no me tocara escribirla
+    </div>
+    <script>
+        // GUI
+        const aiudaBtn = document.body.querySelector("#aiudaBtn");
+        const aiuda = document.body.querySelector("#aiuda");
+        aiudaBtn.onmouseover = () => {
+            aiuda.style.height = "30vw";
+            aiuda.style.padding = "15px";
+            aiuda.style.opacity = "1";
+            
+        }
+        aiudaBtn.onmouseleave = () => {
+            aiuda.style.height = "0";
+            aiuda.style.padding = "0";
+            aiuda.style.opacity = "0";
+        }
+    </script>
+</body>
+</html>
