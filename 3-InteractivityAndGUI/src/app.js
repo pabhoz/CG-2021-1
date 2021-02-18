@@ -143,8 +143,8 @@ function setUpLights() {
     spotLight.castShadow = true;
     scene.add(spotLight);
 
-    const spotLightHelper = new THREE.SpotLightHelper(spotLight);
-    scene.add( spotLightHelper );
+    // const spotLightHelper = new THREE.SpotLightHelper(spotLight);
+    // scene.add( spotLightHelper );
     
     lights.sp = spotLight;
 }
