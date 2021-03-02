@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>4. Base Proyecto</title>
+    <script type="module" src="./src/app.js"></script>
+    <link rel="stylesheet" href="./styles/main.css">
+</head>
+<body>
+    <div id="backBtn">Volver</div>
+    <div class="content">
+        <div class="sceneOption turquoise" data-size="10">
+            <div class="title">Small</div>
+            <span>10x10</span>
+        </div>
+        <div class="sceneOption peterRiver" data-size="20">
+            <div class="title">Medium</div>
+            <span>20x20</span>
+        </div>
+        <div class="sceneOption emerald" data-size="40">
+            <div class="title">Big</div>
+            <span>40x40</span>
+        </div>
+        <!--div class="sceneOption amethyst">
+            <div class="title">Custom</div>
+            <span>?x?</span-->
+        </div>
+    </div>
+    <script type="module">
+        import { main, cleanGUI } from './src/app.js';
+        
+        const options = document.querySelectorAll(".sceneOption");
+        const content = document.querySelector(".content");
+        let size = 10;
+
+        options.forEach(option => {
+            option.onclick = function() {
+                const optionSize = this.dataset.size;
+                size = optionSize;
+                toggleContent();
+                main(size);
+            }
+        });
+
+        const backBtn = document.querySelector("#backBtn");
+        backBtn.onclick = function() {
+            toggleContent();
+            cleanGUI();
+        }
+
+        function toggleContent() {
+            content.style.display = content.style.display == "none" ? "flex" : "none";
+            
+        }
+    </script>
+</body>
+</html>
