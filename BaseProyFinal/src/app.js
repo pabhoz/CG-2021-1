@@ -3,10 +3,11 @@ import { OrbitControls } from '../../node_modules/three/examples/jsm/controls/Or
 import Sound from '../src/Sound.js';
 import Player from '../src/Player.js';
 import Control from '../src/Controls.js';
+import CollidableBox from '../src/CollidableBox.js';
 
 export const players = [];
 
-const scene = new THREE.Scene();
+export const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
 const renderer = new THREE.WebGLRenderer();
 
@@ -18,6 +19,8 @@ let controls = undefined;
 const lights = {
     sp: undefined
 };
+
+export const collidableList = [];
 
 export const sounds = [];
 let spotLight;
@@ -61,6 +64,21 @@ export function main() {
     players.push(p1);
     players.push(p2);
 
+    const box = new THREE.Mesh(
+        new THREE.BoxGeometry(2, 2, 2),
+        new THREE.MeshBasicMaterial({
+            color: 0xffff00,
+            side: THREE.DoubleSide
+        })
+    );
+    box.position.y = 1;
+    box.position.z = -6;
+    box.name = "Coin";
+    scene.add(box);
+    collidableList.push(box);
+    //collidableList.push(players[0].element)
+    collidableList.push(players[1].element)
+
     /*
     sounds.push(new Sound(['./media/1.mp3'], 9, scene, { position: { x: -6, y:0, z: 6}, debug: false }));
     sounds.push(new Sound(['./media/2.mp3'], 9, scene, { position: { x: 6, y:0, z: 6}, debug: false }));
@@ -79,14 +97,14 @@ function animate() {
 function updateElements() {
     renderer.setClearColor(0x000, 1);
     players.forEach(player => {
-        player.updateControls();
+        player.update();
         
         if (players.indexOf(player) == localPlayer) {
             sounds.forEach(sound => {
                 sound.update(player.element);
             });
         }
-        
+        player.collidableBox.update(player);
     });
     
 }

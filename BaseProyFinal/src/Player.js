@@ -1,4 +1,5 @@
 import * as THREE from '../../node_modules/three/build/three.module.js';
+import CollidableBox from './CollidableBox.js';
 
 export default class Player {
 
@@ -13,6 +14,8 @@ export default class Player {
         this.vy = "vy" in ap ? ap.vy : 0;
         this.m = "m" in ap ? ap.m : 5;
         this.jumpForce = "jumpForce" in ap ? ap.jumpForce : 5;
+        this.score = 0;
+        this.id = this.name.split(" ").join("");
     }
 
     set element(mesh) {
@@ -38,11 +41,35 @@ export default class Player {
         return this._element;
     }
 
+    update() {
+        this.updateControls();
+        this.updateGUI();
+    }
+
     updateControls() {
         this.control.update(this.vx, this.vy, this.m, this.jumpForce)
     }
 
+    updateGUI() {
+        const myGUI = document.querySelector(`#${this.id}`);
+        const contents = myGUI.querySelectorAll('label');
+        contents[1].innerHTML = `Score: ${this.score}`;
+    }
+
     play(scene) {
+        this.collidableBox = new CollidableBox(this.element, 1);
         scene.add(this.element);
+
+        const playersGUI = document.querySelector("#players");
+        const pScore = document.createElement("label");
+        pScore.innerHTML = `Score: ${this.score}`;
+        const pName = document.createElement("label");
+        pName.innerHTML = this.name;
+        const pGUI = document.createElement("div");
+        pGUI.classList.add("player");
+        pGUI.id = this.id;
+        pGUI.appendChild(pName);
+        pGUI.appendChild(pScore);
+        playersGUI.appendChild(pGUI);
     }
 }

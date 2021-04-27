@@ -9,3 +9,18 @@ body{
     width: 100vw;
     height: 100vh;
 }
+
+#players{
+    position:absolute;
+    display: flex;
+    flex-flow: column;
+    color: white;
+}
+
+#players .player{
+    padding: 5px;
+}
+
+#players .player label{
+    margin-right: 5px;
+}
