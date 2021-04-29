@@ -11,11 +11,12 @@ export default class Player {
         // Operador ternario
         // Variable = Condición ? valor asignado si la condición es true : valor asignado si la condición es false
         this.vx = "vx" in ap ? ap.vx : 0.1;
-        this.vy = "vy" in ap ? ap.vy : 0;
+        this.vy = "vy" in ap ? ap.vy : 0.5;
         this.m = "m" in ap ? ap.m : 5;
         this.jumpForce = "jumpForce" in ap ? ap.jumpForce : 5;
         this.score = 0;
         this.id = this.name.split(" ").join("");
+
     }
 
     set element(mesh) {

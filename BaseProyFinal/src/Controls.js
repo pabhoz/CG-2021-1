@@ -18,8 +18,6 @@ export default class Control {
         this.select = select || "";
         this.start = start || "";
 
-        this.isInAir, this.isFalling, this.isJumping = false;
-
         this.element = undefined;
     }
 
@@ -109,6 +107,7 @@ export default class Control {
         if (this._right.isPressed) this.element.position.x += this.vx;
         if (this._down.isPressed) this.element.position.z += this.vx;
         if (this._left.isPressed) this.element.position.x -= this.vx;
+        if (this._jump.isPressed) this.element.position.y += this.vy;
 
         // console.log(this.vx)
         // console.log(this.element.position)
@@ -156,6 +155,9 @@ document.onkeydown = (e) => {
             case control.left:
                 control.pressBtn("left");
                 break;
+            case control.jump:
+                control.pressBtn("jump");
+                break;
         }
     });
 
@@ -178,6 +180,9 @@ document.onkeyup = (e) => {
                 break;
             case control.left:
                 control.releaseBtn("left");
+                break;
+            case control.jump:
+                control.releaseBtn("jump");
                 break;
         }
     });

@@ -20,6 +20,9 @@ const lights = {
     sp: undefined
 };
 
+let platform2 = undefined
+let delta = 0
+
 export const collidableList = [];
 
 export const sounds = [];
@@ -57,9 +60,11 @@ export function main() {
     plane.rotation.x = Math.PI / 2;
 
     const p1 = new Player("Player 1", undefined, new Control());
+    p1.element.position.y = 5;
     p1.play(scene);
     const p2 = new Player("Player 2", undefined, new Control("i","l","k","j"));
     p2.element.position.x = 4;
+    p2.element.position.y = 10;
     p2.play(scene);
     players.push(p1);
     players.push(p2);
@@ -76,8 +81,35 @@ export function main() {
     box.name = "Coin";
     scene.add(box);
     collidableList.push(box);
-    //collidableList.push(players[0].element)
-    collidableList.push(players[1].element)
+
+    const platform = new THREE.Mesh(
+        new THREE.BoxGeometry(2, 2, 2),
+        new THREE.MeshBasicMaterial({
+            color: 0x00ffff,
+            side: THREE.DoubleSide
+        })
+    );
+
+    platform.position.x = -1;
+    platform.position.y = 1;
+    scene.add(platform);
+    collidableList.push(platform);
+
+    platform2 = new THREE.Mesh(
+        new THREE.BoxGeometry(2, 2, 2),
+        new THREE.MeshBasicMaterial({
+            color: 0x0ffff0,
+            side: THREE.DoubleSide
+        })
+    );
+
+    platform2.position.x = -3;
+    platform2.position.y = 6;
+    scene.add(platform2);
+    collidableList.push(platform2);
+    collidableList.push(players[0].element)
+    // collidableList.push(players[1].element)
+    collidableList.push(plane)
 
     /*
     sounds.push(new Sound(['./media/1.mp3'], 9, scene, { position: { x: -6, y:0, z: 6}, debug: false }));
@@ -95,6 +127,7 @@ function animate() {
 }
 
 function updateElements() {
+    delta += 0.01;
     renderer.setClearColor(0x000, 1);
     players.forEach(player => {
         player.update();
@@ -106,6 +139,8 @@ function updateElements() {
         }
         player.collidableBox.update(player);
     });
+
+    platform2.position.y += 0.1 * Math.sin(delta);
     
 }
 
