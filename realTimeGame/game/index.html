@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Socket.IO chat</title>
+    <style>
+      body { margin: 0; padding-bottom: 3rem; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
+
+      #form { background: rgba(0, 0, 0, 0.15); padding: 0.25rem; position: fixed; bottom: 0; left: 0; right: 0; display: flex; height: 3rem; box-sizing: border-box; backdrop-filter: blur(10px); }
+      #input { border: none; padding: 0 1rem; flex-grow: 1; border-radius: 2rem; margin: 0.25rem; }
+      #input:focus { outline: none; }
+      #form > button { background: #333; border: none; padding: 0 1rem; margin: 0.25rem; border-radius: 3px; outline: none; color: #fff; }
+
+      #messages { list-style-type: none; margin: 0; padding: 0; }
+      #messages > li { padding: 0.5rem 1rem; }
+      #messages > li:nth-child(odd) { background: #efefef; }
+
+      #logout {
+        position: absolute;
+        top: 0;
+        right: 0;
+        background-color: #efefef;
+        padding: 10px;
+        border-radius: 5px;
+        border: 1px solid rgba(0,0,0,0.2);
+        margin: 5px;
+        cursor: pointer;
+      }
+    </style>
+  </head>
+  <body>
+    <script>
+      const storage = window.localStorage;
+        if (!storage) {
+          alert("Se require un navegador que soporte Local Storage");
+          goToJoin();
+        }
+      const username = localStorage.getItem('username');
+      const room = localStorage.getItem('room');
+
+      function checkUser(){
+        if (!username || !room) {
+          goToJoin();
+        }
+      }
+
+      function goToJoin() {
+        window.location.href = "./join";
+      }
+      checkUser();
+    </script>
+    <div id="logout" onclick="logout()">Cerrar sesión</div>
+    <ul id="messages"></ul>
+    <form id="form" action="">
+      <input id="input" autocomplete="off" /><button>Send</button>
+    </form>
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+      const socket = io();
+
+      const form = document.querySelector("#form");
+      const input = document.querySelector("#input");
+      const msgs = document.querySelector("#messages");
+
+      socket.emit('join-room', room);
+
+      form.addEventListener('submit', (event) => {
+        event.preventDefault();
+        if (input.value) {
+          socket.emit('chat-msg', {
+            username,
+            content: input.value,
+            room
+          });
+          input.value = '';
+        }
+      });
+
+      // Escuchar chat-msg
+      socket.on('chat-msg', (msg) => {
+        const msgEl = document.createElement('li');
+        msgEl.textContent = `${msg.username} dice: ${msg.content}`;
+        msgs.appendChild(msgEl);
+        window.scrollTo(0, document.body.scrollHeight);
+      });
+
+      function logout() {
+        storage.clear();
+        goToJoin();
+      }
+    </script>
+  </body>
+</html>

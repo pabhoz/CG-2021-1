@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <style>
+        *{
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Helvetica, sans-serif;
+            color: #ecf0f1;
+            background-color: #2c3e50;
+            display: flex;
+            height: 100vh;
+            justify-content: center;
+            align-items: center;
+            font-weight: 6vw;
+        }
+
+        #form{
+            display: flex;
+            flex-flow: column;
+            width: 60vw;
+            max-width: 600px;
+        }
+
+        #form input[type=text], #form button{
+            padding: 15px;
+            border-radius: 5px;
+        }
+
+        #form select {
+            padding: 12px;
+            border-radius: 5px;
+            margin: 5px 0;
+        }
+
+        #form h1{
+            width: 100%;
+            text-align: center;
+            padding-bottom: 10px;
+        }
+    </style>
+    <div id="form">
+        <h1>Chat Server</h1>
+        <input type="text" id="username" placeholder="Username" id="">
+        <select id="rooms">
+            <option value="general">General</option>
+            <option value="series">Series</option>
+            <option value="peliculas">Peliculas</option>
+        </select>
+        <button onclick="saveAndGo()">Entrar</button>
+    </div>
+    <script>
+        const input = document.querySelector("#username");
+        const rooms = document.querySelector("#rooms");
+        function saveAndGo() {
+            const storage = window.localStorage;
+            if (!storage) alert("Se require un navegador que soporte Local Storage");
+
+            if (input.value) {
+                storage.setItem('username', input.value);
+                storage.setItem('room', rooms.value);
+                window.location.href = "./";
+            }
+        }
+    </script>
+</body>
+</html>
