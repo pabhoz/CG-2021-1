@@ -1,0 +1,26 @@
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    font-family: Helvetica, sans-serif;
+}
+
+body{
+    width: 100vw;
+    height: 100vh;
+}
+
+#players{
+    position:absolute;
+    display: flex;
+    flex-flow: column;
+    color: white;
+}
+
+#players .player{
+    padding: 5px;
+}
+
+#players .player label{
+    margin-right: 5px;
+}

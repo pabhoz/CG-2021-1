@@ -61,7 +61,7 @@
       const input = document.querySelector("#input");
       const msgs = document.querySelector("#messages");
 
-      socket.emit('join-room', room);
+      socket.emit('join-room', {room, username});
 
       form.addEventListener('submit', (event) => {
         event.preventDefault();
@@ -79,6 +79,13 @@
       socket.on('chat-msg', (msg) => {
         const msgEl = document.createElement('li');
         msgEl.textContent = `${msg.username} dice: ${msg.content}`;
+        msgs.appendChild(msgEl);
+        window.scrollTo(0, document.body.scrollHeight);
+      });
+
+      socket.on('leave-msg', (msg) => {
+        const msgEl = document.createElement('li');
+        msgEl.textContent = msg;
         msgs.appendChild(msgEl);
         window.scrollTo(0, document.body.scrollHeight);
       });

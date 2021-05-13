@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Juego Multijugador en línea</title>
+        <script src="/socket.io/socket.io.js"></script>
+        <script type="module" src="./public/src/Socket.js"></script>
+        <script type="module" src="./public/src/app.js"></script>
+        <link rel="stylesheet" href="./public/styles/main.css">
+    </head>
+    <body>
+        <script>
+            const storage = window.localStorage;
+              if (!storage) {
+                alert("Se require un navegador que soporte Local Storage");
+                goToJoin();
+              }
+            const username = localStorage.getItem('username');
+            const room = localStorage.getItem('room');
+      
+            function checkUser(){
+              if (!username || !room) {
+                goToJoin();
+              }
+            }
+      
+            function goToJoin() {
+              window.location.href = "./join";
+            }
+            checkUser();
+        </script>
+        <div id="players"></div>
+    </body>
+</html>

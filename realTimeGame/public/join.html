@@ -51,17 +51,19 @@
     </style>
     <div id="form">
         <h1>Chat Server</h1>
-        <input type="text" id="username" placeholder="Username" id="">
+        <input onkeyup="checkInput()" type="text" id="username" placeholder="Username" id="">
         <select id="rooms">
             <option value="general">General</option>
             <option value="series">Series</option>
             <option value="peliculas">Peliculas</option>
         </select>
-        <button onclick="saveAndGo()">Entrar</button>
+        <button disabled onclick="saveAndGo()">Entrar</button>
+        <button disabled onclick="saveAndPlay()">Jugar</button>
     </div>
     <script>
         const input = document.querySelector("#username");
         const rooms = document.querySelector("#rooms");
+        const btns = document.querySelectorAll("button");
         function saveAndGo() {
             const storage = window.localStorage;
             if (!storage) alert("Se require un navegador que soporte Local Storage");
@@ -70,6 +72,27 @@
                 storage.setItem('username', input.value);
                 storage.setItem('room', rooms.value);
                 window.location.href = "./";
+            }
+        }
+        function saveAndPlay() {
+            const storage = window.localStorage;
+            if (!storage) alert("Se require un navegador que soporte Local Storage");
+
+            if (input.value) {
+                storage.setItem('username', input.value);
+                storage.setItem('room', rooms.value);
+                window.location.href = "./game";
+            }
+        }
+        function checkInput() {
+            if (input.value) {
+                btns.forEach((btn) => {
+                    btn.disabled = false;
+                });
+            } else {
+                btns.forEach((btn) => {
+                    btn.disabled = true;
+                });
             }
         }
     </script>
