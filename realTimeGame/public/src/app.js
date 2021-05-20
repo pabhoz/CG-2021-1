@@ -5,8 +5,10 @@ import Player from '../src/Player.js';
 import Control from '../src/Controls.js';
 import CollidableBox from '../src/CollidableBox.js';
 import { TexturesManager, ObjsManager } from './LoadersManager.js';
+import { playerMoves } from './Socket.js';
 
 export const players = {};
+let playersLoaded = false;
 
 export const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 10000);
@@ -42,14 +44,35 @@ window.onresize = () => {
    renderer.setSize(window.innerWidth, window.innerHeight, true);
 }
 
-export function joinGame(player, socketId) {
+export function joinGame(player) {
     console.log(`Player: ${player.username} is joining`, player);
+    if (player.id in players) { return }
+
     const newPlayer = new Player(player.username, undefined, new Control());
+    console.log(newPlayer)
     newPlayer.play(scene);
     players[player.id] = newPlayer;
     if (!localPlayer) {
-        localPlayer = socketId;
+        localPlayer = player.id;
         console.log("Id del jugador local: ", localPlayer)
+    }
+}
+
+export function loadPlayers(players) {
+    if (playersLoaded) { return };
+    playersLoaded = true;
+    const playersIds = Object.keys(players);
+    console.log("Players: ", playersIds)
+    playersIds.forEach(playerId => {
+        joinGame(players[playerId]);
+    });
+}
+
+export function removePlayer(player) {
+    if (player.id in players) {
+        const thePlayer = players[player.id];
+        thePlayer.exit(scene);
+        delete players[player.id];
     }
 }
 
@@ -96,6 +119,7 @@ function updateElements() {
     renderer.setClearColor(0x000, 1);
     if (localPlayer in players) {
         players[localPlayer].update();
+        playerMoves(players[localPlayer]._element.position);
     }
    /*Object.keys(players).forEach(id => {
         const player = players[id];

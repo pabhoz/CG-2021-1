@@ -97,6 +97,12 @@ export default class Control {
         return this._start.key;
     }
 
+    setPosition(x, y, z) {
+        this.element.position.x = x;
+        this.element.position.y = y;
+        this.element.position.z = z;
+    }
+
     update(vx, vy, m, jumpForce) {
         this.vx = vx;
         this.vy = vy;

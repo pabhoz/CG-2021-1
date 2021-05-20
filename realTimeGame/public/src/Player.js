@@ -73,4 +73,11 @@ export default class Player {
         pGUI.appendChild(pScore);
         playersGUI.appendChild(pGUI);
     }
+
+    exit(scene) {
+        scene.remove(this.element);
+        const playersGUI = document.querySelector("#players");
+        const playerEl = document.querySelector(`#${this.id}`);
+        playersGUI.removeChild(playerEl);
+    }
 }

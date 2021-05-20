@@ -45,11 +45,21 @@ io.on('connection', (socket) => {
     socket.on('join-game', (data) => {
         socket.join(data.room);
         players[socket.id] = data;
-        io.emit('player-joins', { id: socket.id, ...data});
+        players[socket.id].id = socket.id;
+        io.emit('player-joins', {
+            user: data,
+            users: players
+        });
     });
 
     socket.on('player-moves', (position) => {
-        console.log("Player is moving");
+        // console.log(`Player ${players[socket.id].username} is moving to: ${JSON.stringify(position)}`);
+        try {
+            players[socket.id].position = position;
+            io.to(players[socket.id].room).emit('player-moves', players[socket.id]);
+        } catch (err) {
+            // console.log("Error on player-moves: ",err.stack || err);
+        }
     })
 
     socket.on('join-room', (data) => {
@@ -59,8 +69,15 @@ io.on('connection', (socket) => {
     
     socket.on('disconnect', () => {
         try {
-            const userData = users[socket.id];
-            io.to(userData.room).emit('leave-msg', `${userData.username} ha dejado la sala.`);
+            /*const userData = users[socket.id];
+            io.to(userData.room).emit('leave-msg', `${userData.username} ha dejado la sala.`);*/
+            if (socket.id in players) {
+                const playerData = players[socket.id];
+                delete players[socket.id];
+                // console.log({players, socketId: socket.id});
+                io.to(playerData.room).emit('player-leaves', playerData);
+            }
+            
         } catch (err) {
             console.log(err.stack ? err.stack : err);
         }
